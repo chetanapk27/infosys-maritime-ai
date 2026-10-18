@@ -92,4 +92,4 @@ The following application workflows should be tested before submission:
 - Logout and session termination
 
 ## 11. Project Scope
-This milestone focuses on implementing and validating the portal's authentication, account management, password recovery, and role-specific dashboards. The broader internship project is titled *Agentic AI for Maritime Freight Pricing and Route Optimization*
+This milestone focuses on implementing and validating the portal's authentication, account management, password recovery, and role-specific dashboards. The broader internship project is titled *Agentic AI for Maritime Freight Pricing and Route Optimization*.
