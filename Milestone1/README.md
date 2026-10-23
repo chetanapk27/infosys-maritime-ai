@@ -64,6 +64,32 @@ Store the required credentials in Google Colab Secrets. The secret names must ma
 | `EMAIL_PASSWORD` | Gmail application password |
 | `NGROK_AUTHTOKEN` | Authenticates the ngrok tunnel |
 
+### Ngrok Authentication and Token Setup
+
+Ngrok authentication is used to authorize the ngrok client to create a tunnel between the public internet and the Streamlit application running in Google Colab. In this project, the ngrok authentication token is stored securely in Google Colab Secrets under the name `NGROKAUTHTOKEN`. The application retrieves the token using `userdata.get("NGROKAUTHTOKEN")` and uses it to authenticate the ngrok client before creating a tunnel to port `8501`. Ngrok then generates a public URL through which the user can access the running authentication portal. Storing the token in Colab Secrets instead of hardcoding it in the notebook helps prevent accidental exposure of the credential in the source code.
+
+## How to Sign In and Get Your Ngrok Authentication Token
+
+Follow these steps to obtain the ngrok authentication token and configure it in Google Colab.
+
+1. **Open the ngrok login page:** Visit [https://dashboard.ngrok.com/login](https://dashboard.ngrok.com/login).
+
+2. **Sign in to your account:** Use your registered email and password, or select Google or GitHub sign-in if you used one of these methods to create your account.
+
+3. **Open the Authtoken page:** Visit [https://dashboard.ngrok.com/get-started/your-authtoken](https://dashboard.ngrok.com/get-started/your-authtoken).
+
+4. **Copy the authentication token:** Copy the token displayed on the dashboard. Complete any required account verification if prompted.
+
+5. **Open Google Colab Secrets:** Open your Colab notebook and click the **key icon** in the left sidebar.
+
+6. **Add the token:** Create a secret with the exact name `NGROKAUTHTOKEN` and paste your ngrok authentication token as its value.
+
+7. **Enable notebook access:** Ensure access is enabled for this secret in your notebook.
+
+8. **Run the launch cell:** Execute the setup and launch cell to authenticate ngrok, start the Streamlit application on port `8501`, and generate a public URL.
+
+**Security Note:** Never include your actual ngrok authentication token in your README, source code, screenshots, or public GitHub repository. Store it securely in Google Colab Secrets.
+
 ## 8. How to Run
 1. Open the submitted notebook in Google Colab.
 2. Configure the required secrets in the Colab Secrets panel.
