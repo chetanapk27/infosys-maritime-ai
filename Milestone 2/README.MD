@@ -1,58 +1,42 @@
-# Milestone 2 – Authentication Module
+# Authentication Module – FreightQuote AI
 
-## Overview
-This folder contains the authentication and security-related implementation for the FreightQuote AI application. It uses Python, FastAPI, SQLite, bcrypt, JWT and Gmail SMTP to support secure user authentication, password recovery and application security.
+## 1. Overview
+The Authentication Module provides secure user authentication and account management functionality for the FreightQuote AI application. It is developed using Python and FastAPI, with SQLite for storing user information. The module incorporates password hashing, JWT-based authentication, OTP verification and account security mechanisms.
 
-## Files and Their Description
+## 2. Key Features
 
-### 1. `server.ipynb`
-- Implements the FastAPI application and authentication endpoints.
-- Provides user registration and login functionality.
-- Uses bcrypt to hash passwords and verify login credentials.
-- Generates JWT access tokens for authenticated users.
-- Validates bearer tokens and checks user account status.
-- Implements OTP-based password recovery.
-- Locks accounts after five unsuccessful login attempts for five minutes.
+- **User Registration:** Allows new users to create accounts with username, email and password validation.
+- **User Login:** Authenticates users using registered email addresses and passwords.
+- **Password Security:** Uses bcrypt hashing with automatically generated salts to protect stored passwords.
+- **JWT Authentication:** Generates JSON Web Tokens after successful authentication and validates bearer tokens for protected API requests.
+- **Account Lockout:** Temporarily locks accounts after five consecutive unsuccessful login attempts for five minutes.
+- **Forgot Password:** Generates a six-digit OTP and sends it to the registered email address using Gmail SMTP.
+- **OTP Verification:** Validates OTPs with a five-minute expiration period and prevents reuse after successful password reset.
+- **Password Reset:** Updates the password securely using bcrypt hashing.
+- **Account Status Validation:** Checks whether an account is active or locked before granting access.
 
-### 2. `config.ipynb`
-- Manages application configuration and environment variables.
-- Configures the SQLite database path.
-- Retrieves sensitive credentials from Google Colab Secrets or environment variables.
-- Manages JWT secret keys and email configuration.
-- Stores application-specific settings.
+## 3. Files and Their Functions
 
-### 3. `mailer.ipynb`
-- Handles email communication using Gmail SMTP.
-- Supports sending emails with attachments and optional HTML content.
-- Uses Gmail App Password authentication.
-- Provides email configuration checking.
+| File | Description |
+|---|---|
+| `server.py` | Implements signup, login, JWT validation, OTP generation and password reset APIs. |
+| `config.py` | Manages application configuration, database paths, JWT secrets and email credentials. |
+| `hardening.py` | Implements security headers, request logging, IP-based rate limiting and error handling. |
+| `mailer.py` | Handles email communication through Gmail SMTP. |
+| `localuser.py` | Contains the legacy local operator configuration used before the authentication integration. |
 
-### 4. `hardening.ipynb`
-- Implements additional application security measures.
-- Provides request ID generation and access logging.
-- Applies security headers and Content Security Policy.
-- Implements IP-based rate limiting for API endpoints.
-- Handles server errors without exposing internal tracebacks.
-- Provides application metrics and readiness endpoints.
+## 4. Authentication Workflow
 
-### 5. `localuser.ipynb`
-- Contains the legacy local operator configuration.
-- Defines a default local user with Admin role.
-- Serves as a transitional component for the authentication and role-based access control integration.
+1. A new user submits registration details.
+2. The application validates the username, email and password.
+3. The password is hashed using bcrypt and stored in the SQLite database.
+4. During login, the entered password is verified against the stored hash.
+5. After successful authentication, a JWT access token is generated.
+6. The frontend sends the token in the Authorization Bearer header for protected API requests.
+7. If a user forgets the password, a six-digit OTP is sent to the registered email address.
+8. After successful OTP verification, the user can reset the password securely.
 
-## Authentication Features
-
-- User registration with input validation.
-- Secure password hashing using bcrypt.
-- JWT-based authentication using the HS256 algorithm.
-- Bearer token validation.
-- Failed-login tracking and temporary account lockout.
-- Six-digit OTP generation for password recovery.
-- OTP expiration after five minutes.
-- Secure OTP comparison and one-time usage.
-- Password reset with bcrypt hashing.
-
-## Technologies Used
+## 5. Technologies Used
 
 - Python
 - FastAPI
@@ -60,20 +44,43 @@ This folder contains the authentication and security-related implementation for 
 - bcrypt
 - PyJWT
 - Gmail SMTP
+- Python Secrets Module
 - Google Colab Secrets
 - Environment Variables
 
-## Security Configuration
+## 6. API Endpoints
 
-The application uses configuration values such as:
+| HTTP Method | Endpoint | Purpose |
+|---|---|---|
+| POST | `/api/auth/signup` | User registration |
+| POST | `/api/auth/login` | User login |
+| POST | `/api/auth/forgot` | Send password reset OTP |
+| POST | `/api/auth/reset` | Verify OTP and reset password |
+| GET | `/api/me` | Retrieve authenticated user information |
+
+## 7. Security Measures
+
+- Passwords are never stored in plain text.
+- bcrypt is used for secure password hashing and verification.
+- JWT tokens use the HS256 signing algorithm and have a two-hour expiry.
+- Invalid and expired tokens are rejected.
+- Account lockout protects against repeated incorrect login attempts.
+- OTPs are time-limited and can only be used once.
+- API rate limiting helps prevent excessive requests.
+- Security headers and request logging improve application protection.
+- Sensitive credentials are managed through environment variables or Google Colab Secrets.
+
+## 8. Configuration Requirements
+
+The application uses the following configuration values:
 
 - `JWT_SECRET`
 - `EMAIL_ADDRESS`
 - `EMAIL_PASSWORD`
 - `ADMIN_PASSWORD`
 
-These values must be configured securely using Google Colab Secrets or environment variables. Sensitive credentials should never be committed to GitHub.
+These credentials must be configured securely and must not be exposed in public source code or GitHub repositories.
 
-## Conclusion
+## 9. Conclusion
 
-The Authentication Module provides the core user authentication and security functionality for the FreightQuote AI application. It combines password protection, token-based authentication, OTP verification, account lockout and application-level security mechanisms to improve the reliability and security of the application.
+The Authentication Module provides a secure mechanism for user registration, login and account management in the FreightQuote AI application. By integrating bcrypt password hashing, JWT-based authentication, OTP-based password recovery and account lockout, the module strengthens application security and protects user accounts. Additional security features such as API rate limiting, request logging and security headers further improve the reliability of the authentication system.
