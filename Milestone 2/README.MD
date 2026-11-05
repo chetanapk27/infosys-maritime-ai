@@ -1,86 +1,63 @@
-# Authentication Module – FreightQuote AI
+# FreightQuote AI – Milestone 2
 
-## 1. Overview
-The Authentication Module provides secure user authentication and account management functionality for the FreightQuote AI application. It is developed using Python and FastAPI, with SQLite for storing user information. The module incorporates password hashing, JWT-based authentication, OTP verification and account security mechanisms.
+## 1. Project Overview
 
-## 2. Key Features
+Milestone 2 focuses on extending the FreightQuote AI application by implementing authentication, role-based access control, administrative functionalities, AI Copilot enhancements, and frontend improvements.
 
-- **User Registration:** Allows new users to create accounts with username, email and password validation.
-- **User Login:** Authenticates users using registered email addresses and passwords.
-- **Password Security:** Uses bcrypt hashing with automatically generated salts to protect stored passwords.
-- **JWT Authentication:** Generates JSON Web Tokens after successful authentication and validates bearer tokens for protected API requests.
-- **Account Lockout:** Temporarily locks accounts after five consecutive unsuccessful login attempts for five minutes.
-- **Forgot Password:** Generates a six-digit OTP and sends it to the registered email address using Gmail SMTP.
-- **OTP Verification:** Validates OTPs with a five-minute expiration period and prevents reuse after successful password reset.
-- **Password Reset:** Updates the password securely using bcrypt hashing.
-- **Account Status Validation:** Checks whether an account is active or locked before granting access.
+The milestone is divided among four team members to support parallel development and integration of different modules.
 
-## 3. Files and Their Functions
+## 2. Project Objectives
 
-| File | Description |
-|---|---|
-| `server.py` | Implements signup, login, JWT validation, OTP generation and password reset APIs. |
-| `config.py` | Manages application configuration, database paths, JWT secrets and email credentials. |
-| `hardening.py` | Implements security headers, request logging, IP-based rate limiting and error handling. |
-| `mailer.py` | Handles email communication through Gmail SMTP. |
-| `localuser.py` | Contains the legacy local operator configuration used before the authentication integration. |
+- Implement secure user registration and authentication.
+- Introduce JWT-based authentication and password security.
+- Implement role-based access control (RBAC).
+- Develop administrative management functionalities.
+- Enhance the AI Copilot with additional questions and role-aware responses.
+- Improve frontend usability, responsiveness, and visual design.
 
-## 4. Authentication Workflow
+## 3. Technology Stack
 
-1. A new user submits registration details.
-2. The application validates the username, email and password.
-3. The password is hashed using bcrypt and stored in the SQLite database.
-4. During login, the entered password is verified against the stored hash.
-5. After successful authentication, a JWT access token is generated.
-6. The frontend sends the token in the Authorization Bearer header for protected API requests.
-7. If a user forgets the password, a six-digit OTP is sent to the registered email address.
-8. After successful OTP verification, the user can reset the password securely.
+- **Backend:** Python, FastAPI
+- **Database:** SQLite
+- **Authentication:** JWT, bcrypt
+- **Frontend:** HTML, CSS, JavaScript
+- **Email Service:** Gmail SMTP
+- **AI Copilot:** Python-based question-answering and SQL functionality
 
-## 5. Technologies Used
+## 4. Authentication Module&#x20;
 
-- Python
-- FastAPI
-- SQLite
-- bcrypt
-- PyJWT
-- Gmail SMTP
-- Python Secrets Module
-- Google Colab Secrets
-- Environment Variables
+The Authentication module focuses on secure user account management. It includes user registration, login, password hashing using bcrypt, JWT-based authentication, OTP-based password recovery, failed-login tracking, account lockout, and profile management.
 
-## 6. API Endpoints
+Users can view their profile details and update their username or password after verifying their current password.
 
-| HTTP Method | Endpoint | Purpose |
-|---|---|---|
-| POST | `/api/auth/signup` | User registration |
-| POST | `/api/auth/login` | User login |
-| POST | `/api/auth/forgot` | Send password reset OTP |
-| POST | `/api/auth/reset` | Verify OTP and reset password |
-| GET | `/api/me` | Retrieve authenticated user information |
+## 5. Testing and Verification
 
-## 7. Security Measures
+The following authentication functionalities were implemented and tested:
 
-- Passwords are never stored in plain text.
-- bcrypt is used for secure password hashing and verification.
-- JWT tokens use the HS256 signing algorithm and have a two-hour expiry.
-- Invalid and expired tokens are rejected.
-- Account lockout protects against repeated incorrect login attempts.
-- OTPs are time-limited and can only be used once.
-- API rate limiting helps prevent excessive requests.
-- Security headers and request logging improve application protection.
-- Sensitive credentials are managed through environment variables or Google Colab Secrets.
+- User registration and database password hashing.
+- Successful and unsuccessful login.
+- OTP generation and email delivery.
+- Password reset functionality.
+- Profile information retrieval.
+- Username and password updates.
+- Login using the updated password.
 
-## 8. Configuration Requirements
+## 6. Screenshots
 
-The application uses the following configuration values:
+Screenshots of the implemented modules and testing results are included in this section.
 
-- `JWT_SECRET`
-- `EMAIL_ADDRESS`
-- `EMAIL_PASSWORD`
-- `ADMIN_PASSWORD`
+## 7. Conclusion
 
-These credentials must be configured securely and must not be exposed in public source code or GitHub repositories.
+Milestone 2 extends the FreightQuote AI application through the development of authentication, access control, administrative management, AI Copilot enhancements, and frontend improvements. The division of responsibilities among team members supports modular development and integration of the different components.
 
-## 9. Conclusion
+## 8. Team Contributions
 
-The Authentication Module provides a secure mechanism for user registration, login and account management in the FreightQuote AI application. By integrating bcrypt password hashing, JWT-based authentication, OTP-based password recovery and account lockout, the module strengthens application security and protects user accounts. Additional security features such as API rate limiting, request logging and security headers further improve the reliability of the authentication system.
+The Milestone 2 project work was divided among four team members, with each member responsible for specific modules and implementation tasks.
+
+| Team Member        | Responsibility            | Contributions                                                                                                                                                                                                                   |
+| ------------------ | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Chetana P Kulkarni | Backend Authentication    | Users table, signup/login/forgot/reset routes, password hashing, JWT, `user_of()` rewrite, 5-wrong-password lockout, removal of `localuser.py`, and profile routes.                                                             |
+| Ankit Kumar        | RBAC and Admin Management | `rbac.py` (`ROLE_MENU`, `ROLE_CAPS`), `menu_for`, `need`, 403 handling on direct page URLs, customer filtering by `customer_id`, admin routes (add, delete, promote, lock, activity log, KPIs), last-admin and self-lock rules. |
+| Venu Kumar         | AI Copilot                | 15+ new questions in `analyst.py` / `qa.py`, spelling and wording handling, SQL and row-count display, polite out-of-scope replies, role-aware answers, and tested-questions list.                                              |
+| Anshu Bauskar      | User Interface            | Login, signup and forgot-password screens in `app.js`, Profile page, Admin page UI, `style.css` theme, dark mode, mobile layout, loading and error states.                                                                      |
+
